@@ -17,14 +17,37 @@ const Todos = () => {
       setTodos(data);
     });
   }, []);
+
+  const handleAddTodo = (value: string) => {
+    const newTodo: todo = {
+      userId: 2,
+      id: todos.length,
+      completed: false,
+      title: value,
+    };
+    setTodos([...todos, newTodo]);
+  };
+  const handleCheck = (id: number) => {
+    const newTodos = todos.map((todo) => {
+      if (todo.id == id) {
+        if (todo.completed) {
+          todo.completed = false;
+        } else {
+          todo.completed = true;
+        }
+      }
+      return todo;
+    });
+    setTodos([...newTodos]);
+  };
   const completedTasks = todos.filter((todo) => todo.completed);
   const remainingTasks = todos.filter((todo) => !todo.completed);
   return (
     <div className="container mx-auto mt-20 bg-slate-300 p-4">
-      <AddTodo />
+      <AddTodo onAddTodo={handleAddTodo} />
       <h2 className="text-center text-xl font-semibold">Tasks</h2>
       {todos.map((todo) => (
-        <Todo key={todo.id} todo={todo} />
+        <Todo onChecked={handleCheck} key={todo.id} todo={todo} />
       ))}
 
       <div className="mt-10 px-2 flex justify-between align-center">
